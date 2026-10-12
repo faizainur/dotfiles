@@ -32,6 +32,7 @@ lua/
 | `dap.lua` | `nvim-dap` + `dap-ui` + `dap-go` + `dap-ruby`. **External requirement:** the pwa-node adapter expects `~/.config/vscode-js-debug/js-debug/src/dapDebugServer.js`. |
 | `testing.lua` | `neotest` stack (rspec, golang, jest, vim-test adapters) + `vim-test`. Keymaps below. |
 | `snacks.lua` | Explorer: does **not** hijack netrw (`<leader>e` on demand); file tree always shows dotfiles (`hidden = true`). Picker navigation table below. |
+| `macros.lua` | Custom **Macros picker** (`<leader>m`): lists non-empty named registers (a–z, 0–9) with preview; `<CR>` plays back the selected macro. For all registers use `<leader>s"` (built-in Snacks registers picker). |
 | `editing.lua` | `nvim-ufo` folding (folds open by default), `nvim-surround`, `nvim-autopairs` (mini.pairs disabled), `Comment.nvim`, `indent-blankline`. |
 | `git.lua` | `git-blame.nvim` (inline virtual-text blame) + `lazygit.nvim`. |
 | `lang.lua` | `vim-go`, **`typescript-tools.nvim`** (replaces plain tsserver LSP), `live-server.nvim`, `nvim-rg`. |
@@ -120,6 +121,16 @@ Scratch buffers (`Snacks.scratch`, provided by snacks + LazyVim):
 | `<leader>S` | select between existing scratch buffers (empty until one exists) |
 | `<leader>uz` | toggle zen mode |
 | `<leader>wm` / `<leader>uZ` | toggle zoom (width-only focus) |
+
+Macros (`plugins/macros.lua`):
+
+| Key | Action |
+|---|---|
+| `<leader>m` | open the **Macros** picker — one line per non-empty named register (a–z, 0–9), preview shows the recorded keystrokes |
+| `<CR>` | play back the selected macro (equivalent to `@{reg}`) |
+
+`<leader>m` was chosen because `<leader>sm` is taken (LSP symbols). Recording
+macros is plain vim (`{reg}q...q`).
 
 ## Requirements
 
