@@ -128,9 +128,8 @@ Macros (`plugins/macros.lua`):
 |---|---|
 | `<leader>m` | open the **Macros** picker — one line per non-empty named register (a–z, 0–9), preview shows the recorded keystrokes |
 | `<CR>` | play back the selected macro (equivalent to `@{reg}`) |
+| `{count}<leader>m` | play the macro **count times** (`3<leader>m` ≡ `3@q`); type the count before opening — digits inside the picker belong to the filter |
 
-`<leader>m` was chosen because `<leader>sm` is taken (LSP symbols). Recording
-macros is plain vim (`{reg}q...q`).
 
 ## Requirements
 
