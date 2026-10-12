@@ -1,26 +1,31 @@
 -- Mason tooling ported from the repo (mason-tool-installer + mason-null-ls)
 -- NOTE: mason-null-ls is part of the none-ls formatter setup (formatter.lua).
+-- Entries must be mason package IDs (hyphenated) or lspconfig names that
+-- mason-lspconfig can translate; declaring mason.nvim as a dependency
+-- guarantees the registry is loaded before the installer runs, regardless
+-- of whether none-ls is in the spec.
 return {
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "mason-org/mason.nvim" },
     opts = {
-      -- mirrors the repo's lsp.lua ensure_installed list (servers + tools)
+      -- canonical mason package IDs (see ~/.local/share/nvim/mason/registries)
       ensure_installed = {
         "gopls",
         "pyright",
-        "rust_analyzer",
-        "lua_ls",
-        -- "ruby_lsp",
+        "rust-analyzer",
+        "lua-language-server",
+        -- "ruby-lsp",
         -- "solargraph",
         -- "rubocop",
-        "clojure_lsp",
+        "clojure-lsp",
         "cljfmt",
-        "gitlab_ci_ls",
+        "gitlab-ci-ls",
         -- "rubyfmt",
-        "typescript_language_server",
-        "html_lsp",
+        "typescript-language-server",
+        "html-lsp",
         "templ",
-        "svelte",
+        "svelte-language-server",
         "stylua",
       },
     },
