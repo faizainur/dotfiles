@@ -1,0 +1,9 @@
+configuration {
+    show-icons: true;
+    display-drun: "All";
+    display-run: ">_";
+    display-window: "Windows";
+    display-filebrowser: "Files";
+    display-ssh: "ssh";
+}
+@import "/usr/share/rofi/themes/solarized.rasi"
