@@ -66,6 +66,29 @@ Git:
 |---|---|
 | `<leader>lg` | LazyGit |
 
+Debugging (DAP, `plugins/dap.lua`):
+
+| Key | Action |
+|---|---|
+| `<F5>` | start / continue |
+| `<F10>` / `<F11>` / `<F12>` | step over / into / out |
+| `<leader>bt` | toggle breakpoint |
+| `<leader>B` | set breakpoint (prompts for optional condition) |
+| `<leader>dr` | open REPL |
+| `<leader>dl` | re-run last session |
+| `<leader>de` | evaluate expression / visual selection (dap-ui) |
+| `<leader>dh` | hover widget (normal + visual) |
+| `<leader>dp` | preview widget (normal + visual) |
+| `<leader>df` / `<leader>ds` | frames / scopes centered float |
+| `<leader>dgt` | Go: debug test (`dap-go`) |
+
+dap-ui **opens automatically** on launch/attach and closes on
+terminate/exit (listeners in `dap.lua`); no separate open/toggle keys are
+defined. Breakpoint gutter signs: 🛑 breakpoint, 🟡 conditional, ❌ rejected,
+📘 log point. JS/TS debugging needs the external `vscode-js-debug` adapter
+(see Requirements). Debugging tests from neotest uses `<leader>tb` (tests
+table above).
+
 ## Snacks picker navigation
 
 Pickers open as multiple panes: an **input** box, a **list** of results
