@@ -1,10 +1,15 @@
-# Dotfiles installer — symlinks every config dir under the profile roots
-# into ~/.config (backing up anything already there). No config names are
-# hardcoded: scripts/link.sh discovers them from the directory structure, so
-# adding a tool is just `mkdir i3wm/alacritty` (or macosx/, shared/).
+# Dotfiles installer — dynamically symlinks configs into ~/.config and
+# home dotfiles into $HOME (see scripts/link.sh + README). No config names
+# hardcoded: adding a tool is just `mkdir i3wm/alacritty`.
 OS := $(shell uname -s)
 
-.PHONY: install install-linux install-darwin i3wm macos uninstall uninstall-restore status
+# Which shell's files under <profile>/home/shells/ link into $HOME.
+# Default: auto-detected login shell. Override, e.g.:  make install SH=zsh
+SH ?=
+
+LINK = SH="$(SH)" bash scripts/link.sh
+
+.PHONY: install install-linux install-darwin i3wm macos uninstall uninstall-restore status shells
 
 # Auto-select profile by current OS
 install:
@@ -19,22 +24,26 @@ endif
 install-linux: i3wm
 install-darwin: macos
 
-# Explicit overrides (shared configs + chosen profile), handy via symlinks
-# even when e.g. testing the macOS layout on Linux
+# Explicit overrides (shared configs + chosen profile)
 i3wm:
-	@bash scripts/link.sh link shared i3wm
+	@$(LINK) link shared i3wm
 
 macos:
-	@bash scripts/link.sh link shared macosx
+	@$(LINK) link shared macosx
 
-# Remove only symlinks that point into this repo; real dirs and backups stay.
-# Add ROLLBACK=1 to also restore the latest ~/.config/<name>.backup* per config.
+# Remove only symlinks that point into this repo (both ~/.config and $HOME);
+# real files/dirs and backups are never touched. Add ROLLBACK=1 to also
+# restore the newest backup for each removed entry.
 uninstall:
-	@bash scripts/link.sh unlink shared i3wm macosx $(if $(ROLLBACK),--rollback,)
+	@$(LINK) unlink shared $(if $(ROLLBACK),--rollback,)
 
 # Same as: make uninstall ROLLBACK=1
 uninstall-restore:
-	@bash scripts/link.sh unlink shared i3wm macosx --rollback
+	@$(LINK) unlink shared --rollback
 
 status:
-	@bash scripts/link.sh status shared i3wm macosx
+	@$(LINK) status shared i3wm macosx
+
+# List available shell configs under <profile>/home/shells/
+shells:
+	@$(LINK) shells shared i3wm macosx

@@ -6,23 +6,50 @@ live config changes instantly.
 
 ## Layout
 
-Every *direct child directory* of a profile folder is a config, symlinked to
-`~/.config/<name>`:
+Everything is discovered from the directory structure — no names hardcoded
+anywhere. Each profile folder (`shared/`, `i3wm/`, `macosx/`) follows two
+rules:
+
+- a direct **child directory** → symlinked to `~/.config/<name>`
+- a **`home/`** dir → each of its items (files *and* dotfiles) → `~/<item>`
+- **`home/shells/<shell>/`** → items of the *chosen* shell only → `~/<item>`
 
 ```
 .
 ├── Makefile              # entry points (no config names hardcoded)
 ├── scripts/link.sh       # discovery + backup + symlink engine
 ├── shared/               # linked on every OS
-│   └── nvim/             # -> ~/.config/nvim
+│   ├── alacritty/        # -> ~/.config/alacritty
+│   ├── nvim/             # -> ~/.config/nvim
+│   └── home/
+│       └── shells/
+│           └── zsh/
+│               └── .zshrc        # -> ~/.zshrc  (when shell=zsh)
 ├── i3wm/                 # Linux / i3 profile
-│   ├── i3/               # -> ~/.config/i3
-│   ├── picom/            # -> ~/.config/picom
-│   ├── polybar/          # -> ~/.config/polybar
-│   └── rofi/             # -> ~/.config/rofi
+│   ├── home/             # (optional) i3-specific files for ~
+│   ├── i3/  picom/  polybar/  rofi/   # -> ~/.config/<name>
 └── macosx/               # macOS profile
+    ├── home/
+    │   └── .aerospace.toml     # -> ~/.aerospace.toml
     └── sketchybar/       # -> ~/.config/sketchybar
 ```
+
+`home` and `shells` are reserved names; children prefixed `_` or `.` are
+skipped as configs, so `_scratch/` stays in the repo but out of the install.
+
+## Shell selection
+
+The shell under `home/shells/` defaults to your **detected login shell**
+(via `getent`/`dscl`, so it works even under make's `/bin/sh`). Override per
+command:
+
+```sh
+make install SH=zsh     # or bash, fish, ...
+make shells             # list available shell dirs
+```
+
+When changing shells, run `make uninstall` first — switching `SH` does not
+unremove links created for the previous shell.
 
 ## Usage
 
@@ -38,8 +65,9 @@ make uninstall-restore      # alias for the above
 
 ### Uninstall & rollback
 
-`make uninstall` only removes symlinks that point into this repo — real
-directories and backups are never touched. Orphaned links (a config dir since
+`make uninstall` only removes symlinks that point into this repo — from both
+`~/.config` and `$HOME` — and real directories/files and backups are never
+touched. Orphaned links (a config dir since
 deleted from the repo) are cleaned up too. With `ROLLBACK=1`
 (or `make uninstall-restore`), after removing each link the newest backup
 for that config (`<name>.backup`, `<name>.backup.<timestamp>`, or
@@ -64,8 +92,11 @@ mkdir -p i3wm/alacritty && touch i3wm/alacritty/alacritty.toml
 make install
 ```
 
-The script discovers it automatically. To keep a folder in the repo but out
-of the install (e.g. WIP), prefix it with `_` or `.` — `_scratch/` is skipped.
+For files that belong in `$HOME` itself (`.zshrc`, `.profile`, …), drop them
+under `<profile>/home/`, or under `<profile>/home/shells/<shell>/` if they
+are shell-specific. The script discovers all of it automatically. To keep a
+folder in the repo but out of the install (e.g. WIP), prefix it with `_` or
+`.` — `_scratch/` is skipped.
 
 ## Notes
 
