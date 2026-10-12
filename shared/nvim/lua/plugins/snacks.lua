@@ -6,5 +6,12 @@ return {
 			-- The explorer is still available on demand with <leader>e
 			replace_netrw = false,
 		},
+		picker = {
+			sources = {
+				explorer = {
+					hidden = true, -- always show dotfiles in the file tree
+				},
+			},
+		},
 	},
 }
