@@ -1,6 +1,7 @@
 -- Macros picker: list recorded named registers (a-z, 0-9) and play them.
 -- <leader>m opens the picker; <CR> plays the selected macro.
--- (Plain "list all registers" remains available as <leader>s" / Snacks.picker.registers.)
+-- Type a count BEFORE opening (e.g. 3<leader>m) to play the macro 3 times,
+-- like 3@q.
 
 local NAMED_REGS = "abcdefghijklmnopqrstuvwxyz0123456789"
 
@@ -27,6 +28,9 @@ local function macro_items()
 end
 
 local function open_macros_picker()
+  -- capture the count NOW: by the time the picker's confirm action runs,
+  -- v:count has long been reset
+  local count = vim.v.count
   Snacks.picker.pick({
     name = "macros",
     title = " 󰁕 Macros",
@@ -39,10 +43,11 @@ local function open_macros_picker()
         desc = "Play Macro",
         action = function(_, item)
           if item and item.reg then
+            local prefix = count > 0 and tostring(count) or ""
             -- schedule: the picker's close sequence still runs after this
             -- action returns; injecting before it lands does nothing
             vim.schedule(function()
-              vim.api.nvim_input("@" .. item.reg)
+              vim.api.nvim_input(prefix .. "@" .. item.reg)
             end)
           end
         end,
