@@ -1,0 +1,12 @@
+theme = Catppuccin Mocha
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14
+window-padding-x = 15
+window-padding-y = 10
+
+
+background-opacity = 0.7
+background-blur = true
+shell-integration-features = ssh-env
+shell-integration-features = ssh-terminfo
+macos-titlebar-style = hidden
