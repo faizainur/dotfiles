@@ -1,8 +1,10 @@
-require("config.lazy")
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "go", "typescript", "javascript", "lua", "svelte", "ruby", "python", "html", "css" },
-  callback = function()
-    vim.treesitter.start()
-  end,
+-- Registered early so filetype detection works before plugins load
+vim.filetype.add({
+  extension = {
+    tf = "terraform",
+    tfvars = "terraform",
+    svelte = "svelte",
+  },
 })
+
+require("config.lazy")

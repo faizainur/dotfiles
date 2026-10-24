@@ -1,61 +1,26 @@
 return {
   { -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
-    lazy = false,
-    branch = "main",
-    build = ":TSUpdate",
+    -- LazyVim's default spec handles the `main` branch API: setup(),
+    -- installing ensure_installed in the background, and a guarded
+    -- vim.treesitter.start() FileType autocmd. Only extend opts here.
     opts = {
       ensure_installed = {
-        "bash",
-        "c",
-        "diff",
-        "html",
-        "lua",
-        "luadoc",
-        "markdown",
-        "markdown_inline",
-        "query",
-        "vim",
-        "vimdoc",
-        "go",
         "clojure",
-        "ruby",
-        "javascript",
-        "typescript",
-        "make",
         "cmake",
-        "java",
-        "json",
-        "toml",
-        "yaml",
-        "sql",
-        "graphql",
-        "terraform",
-        "python",
-        "gitignore",
-        "tsx",
         "css",
-        "templ",
+        "gitignore",
+        "go",
+        "graphql",
+        "java",
+        "make",
+        "ruby",
         "svelte",
+        "sql",
+        "templ",
+        "terraform",
       },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { "ruby" },
-      },
-      indent = { enable = true, disable = { "ruby" } },
+      indent = { disable = { "ruby" } },
     },
-    config = function(_, opts)
-      -- Register filetypes BEFORE setting up treesitter
-      vim.filetype.add({
-        extension = {
-          tf = "terraform",
-          tfvars = "terraform",
-          svelte = "svelte",
-        },
-      })
-
-      require("nvim-treesitter").setup(opts)
-    end,
   },
 }
